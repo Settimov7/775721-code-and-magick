@@ -49,13 +49,11 @@ function generateRandomNumber(min, max) {
 }
 
 function generateSimilarСharacter() {
-  var character = {
+  return {
     name: NAMES[generateRandomNumber(0, NAMES.length)] + ' ' + SURNAMES[generateRandomNumber(0, SURNAMES.length)],
     coatColor: COAT_COLORS[generateRandomNumber(0, COAT_COLORS.length)],
     eyesColor: EYES_COLORS[generateRandomNumber(0, EYES_COLORS.length)]
   };
-
-  return character;
 }
 
 function generateSimilarСharacters(quantity) {
@@ -88,7 +86,11 @@ function generateSimilarСharactersFragment(similarCharacters) {
   return similarСharactersFragment;
 }
 
-setup.classList.remove('hidden');
+function hideElement(element) {
+  element.classList.remove('hidden');
+}
+
+hideElement(setup);
 similarCharactersList.appendChild(generateSimilarСharactersFragment(generateSimilarСharacters(SIMILAR_CHARACTERS_QUANTITY)));
-setupSimilar.classList.remove('hidden');
+hideElement(setupSimilar);
 
