@@ -45,6 +45,10 @@ var FIREBALL_COLORS = [
 var SIMILAR_CHARACTERS_QUANTITY = 4;
 var ENTER_KEYCODE = 13;
 var ESC_KEYCODE = 27;
+var SETUP_START_POSITION = {
+  top: '80px',
+  left: '50%'
+};
 
 var similarCharacterTemplate = document.querySelector('#similar-wizard-template')
   .content
@@ -58,6 +62,8 @@ var setupWizard = setup.querySelector('.setup-wizard');
 var setupWizardCoat = setupWizard.querySelector('.wizard-coat');
 var setupWizardEyes = setupWizard.querySelector('.wizard-eyes');
 var setupFireball = setup.querySelector('.setup-fireball-wrap');
+// var setupHandler = setup.querySelector('.setup-user-pic');
+var setupHandler = setup.querySelector('.upload');
 
 function generateRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -118,7 +124,59 @@ function onPopupEscPress(evt) {
 function openPopup() {
   showElement(setup);
 
+  setup.style.top = SETUP_START_POSITION.top;
+  setup.style.left = SETUP_START_POSITION.left;
   document.addEventListener('keydown', onPopupEscPress);
+}
+
+function setupDragging(evt) {
+  evt.preventDefault();
+
+  var dragged = false;
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  function onMouseMove(moveEvt) {
+    moveEvt.preventDefault();
+
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    dragged = true;
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    setup.style.top = (setup.offsetTop - shift.y) + 'px';
+    setup.style.left = (setup.offsetLeft - shift.x) + 'px';
+  }
+
+  function onMouseUp(upEvt) {
+    upEvt.preventDefault();
+
+    function onClickPreventDefault(clickEvt) {
+      clickEvt.preventDefault();
+
+      setupHandler.removeEventListener('click', onClickPreventDefault);
+    }
+
+    if (dragged) {
+      setupHandler.addEventListener('click', onClickPreventDefault);
+    }
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  }
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
 }
 
 similarCharactersList.appendChild(generateSimilarСharactersFragment(generateSimilarСharacters(SIMILAR_CHARACTERS_QUANTITY)));
@@ -175,5 +233,6 @@ setupFireball.addEventListener('click', function (evt) {
   setupFireball.querySelector('input[name="fireball-color"]').value = newColor;
 });
 
-showElement(setupSimilar);
+setupHandler.addEventListener('mousedown', setupDragging);
 
+showElement(setupSimilar);
