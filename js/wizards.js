@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var WIZARDS_URL = 'https://js.dump.academy/code-and-magick/data';
   var SIMILAR_CHARACTERS_QUANTITY = 4;
 
   var similarCharactersList = window.similarCharactersList;
@@ -18,7 +19,7 @@
     return similarCharacterElement;
   }
 
-  function onLoad(wizards) {
+  function generateSimilarCharacters(wizards) {
     var similarСharactersFragment = document.createDocumentFragment();
 
     for (var i = 0; i < SIMILAR_CHARACTERS_QUANTITY; i++) {
@@ -28,17 +29,9 @@
     similarCharactersList.appendChild(similarСharactersFragment);
   }
 
-  function onError(errorMessage) {
-    var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '30px';
-    node.textContent = errorMessage;
-
-    document.body.insertAdjacentElement('afterbegin', node);
+  function onLoad(wizards) {
+    generateSimilarCharacters(wizards);
   }
 
-  window.backend.load(onLoad, onError);
+  window.backend.load(WIZARDS_URL, onLoad, window.onError);
 })();

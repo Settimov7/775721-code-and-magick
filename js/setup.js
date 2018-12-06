@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var SAVE_URL = 'https://js.dump.academy/code-and-magick';
+
   var setup = document.querySelector('.setup');
   var setupSimilar = setup.querySelector('.setup-similar');
   var similarCharactersList = setupSimilar.querySelector('.setup-similar-list');
@@ -12,26 +14,14 @@
   var setupHandler = setup.querySelector('.upload');
   var setupForm = setup.querySelector('.setup-wizard-form');
 
-  function closeSetup() {
-    setup.classList.add('hidden');
-  }
-
-  function onError(errorMessage) {
-    var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '30px';
-    node.textContent = errorMessage;
-
-    document.body.insertAdjacentElement('afterbegin', node);
+  function onDataSave() {
+    window.util.hideElement(setup);
   }
 
   setupForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
 
-    window.backend.save(new FormData(setupForm), closeSetup, onError);
+    window.backend.save(SAVE_URL, new FormData(setupForm), onDataSave, window.onError);
   });
 
   window.dialog(setup);

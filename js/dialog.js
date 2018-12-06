@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var HIDDEN_CLASS_NAME = 'hidden';
   var SETUP_START_POSITION = {
     top: '80px',
     left: '50%'
@@ -12,21 +11,13 @@
     var setupClose = dialogWindow.querySelector('.setup-close');
     var setupSimilar = dialogWindow.querySelector('.setup-similar');
 
-    function showElement(element) {
-      element.classList.remove(HIDDEN_CLASS_NAME);
-    }
-
-    function hideElement(element) {
-      element.classList.add(HIDDEN_CLASS_NAME);
-    }
-
     function onPopupEscPress(evt) {
       window.util.isEscEvent(evt, closePopup);
     }
 
     function openPopup() {
-      showElement(dialogWindow);
-      showElement(setupSimilar);
+      window.util.showElement(dialogWindow);
+      window.util.showElement(setupSimilar);
 
       dialogWindow.style.top = SETUP_START_POSITION.top;
       dialogWindow.style.left = SETUP_START_POSITION.left;
@@ -34,7 +25,7 @@
     }
 
     function closePopup() {
-      hideElement(dialogWindow);
+      window.util.hideElement(dialogWindow);
 
       document.removeEventListener('keydown', onPopupEscPress);
     }
