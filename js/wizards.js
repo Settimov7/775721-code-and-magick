@@ -1,53 +1,37 @@
 'use strict';
 
 (function () {
-  var wizardsData = window.wizardsData;
-  var getRandomElement = window.util.getRandomElement;
+  var WIZARDS_URL = 'https://js.dump.academy/code-and-magick/data';
   var SIMILAR_CHARACTERS_QUANTITY = 4;
 
+  var similarCharactersList = window.similarCharactersList;
   var similarCharacterTemplate = document.querySelector('#similar-wizard-template')
-  .content
-  .querySelector('.setup-similar-item');
+    .content
+    .querySelector('.setup-similar-item');
 
-  function generateSimilarСharacter() {
-    return {
-      name: getRandomElement(wizardsData.names) + ' ' + getRandomElement(wizardsData.surnames),
-      coatColor: getRandomElement(wizardsData.coatColors),
-      eyesColor: getRandomElement(wizardsData.eyesColors)
-    };
-  }
-
-  function generateSimilarСharacters(quantity) {
-    var similarCharacters = [];
-
-    for (var i = 0; i < quantity; i++) {
-      similarCharacters.push(generateSimilarСharacter());
-    }
-
-    return similarCharacters;
-  }
-
-  function generateSimilarСharacterElement(similarCharacter) {
+  function generateSimilarCharacter(wizard) {
     var similarCharacterElement = similarCharacterTemplate.cloneNode(true);
 
-    similarCharacterElement.querySelector('.setup-similar-label').textContent = similarCharacter.name;
-    similarCharacterElement.querySelector('.wizard-coat').style.fill = similarCharacter.coatColor;
-    similarCharacterElement.querySelector('.wizard-eyes').style.fill = similarCharacter.eyesColor;
+    similarCharacterElement.querySelector('.setup-similar-label').textContent = wizard.name;
+    similarCharacterElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat;
+    similarCharacterElement.querySelector('.wizard-eyes').style.fill = wizard.colorEyes;
 
     return similarCharacterElement;
   }
 
-  function generateSimilarСharactersFragment(similarCharacters) {
+  function generateSimilarCharacters(wizards) {
     var similarСharactersFragment = document.createDocumentFragment();
 
-    for (var i = 0; i < similarCharacters.length; i++) {
-      similarСharactersFragment.appendChild(generateSimilarСharacterElement(similarCharacters[i]));
+    for (var i = 0; i < SIMILAR_CHARACTERS_QUANTITY; i++) {
+      similarСharactersFragment.appendChild(generateSimilarCharacter(wizards[i]));
     }
 
-    return similarСharactersFragment;
+    similarCharactersList.appendChild(similarСharactersFragment);
   }
 
-  window.addCharactersToList = function (charactersList) {
-    charactersList.appendChild(generateSimilarСharactersFragment(generateSimilarСharacters(SIMILAR_CHARACTERS_QUANTITY)));
-  };
+  function onLoad(wizards) {
+    generateSimilarCharacters(wizards);
+  }
+
+  window.backend.load(WIZARDS_URL, onLoad, window.onError);
 })();
