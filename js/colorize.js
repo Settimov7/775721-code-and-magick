@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   window.colorize = function (element, inputField, colors) {
     element.addEventListener('click', function (evt) {
       evt.preventDefault();
@@ -14,6 +15,8 @@
       }
 
       inputField.value = newColor;
+
+      window.debounce(window.updateSimilarCharacters);
     });
   };
 })();
